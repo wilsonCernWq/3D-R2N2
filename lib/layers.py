@@ -5,7 +5,7 @@ import collections
 import theano
 import theano.tensor as tensor
 from theano.tensor.nnet import conv, conv3d2d, sigmoid
-from theano.tensor.signal import downsample
+from theano.tensor.signal import pool
 
 trainable_params = []
 
@@ -101,7 +101,6 @@ class Layer(object):
     ''' Layer abstract class. support basic functionalities.
     If you want to set the output shape, either prev_layer or input_shape must
     be defined.
-
     If you want to use the computation graph, provide either prev_layer or set_input
     '''
 
@@ -164,9 +163,7 @@ class TensorProductLayer(Layer):
 class BlockDiagonalLayer(Layer):
     """
     Compute block diagonal matrix multiplication efficiently using broadcasting
-
     Last dimension will be used for matrix multiplication.
-
     prev_layer.output_shape = N x D_1 x D_2 x ... x D_{n-1} x D_n
     output_shape            = N x D_1 x D_2 x ... x D_{n-1} x n_out
     """
@@ -266,7 +263,6 @@ class ReshapeLayer(Layer):
 class ConvLayer(Layer):
     """Conv Layer
     filter_shape: [n_out_channel, n_height, n_width]
-
     self._input_shape: [batch_size, n_in_channel, n_height, n_width]
     """
 
@@ -347,7 +343,7 @@ class PoolLayer(Layer):
         self._output_shape = [self._input_shape[0], self._input_shape[1], out_r, out_c]
 
     def set_output(self):
-        pooled_out = downsample.max_pool_2d(
+        pooled_out = pool.pool_2d(
             input=self._prev_layer.output,
             ds=self._pool_size,
             ignore_border=True,
@@ -508,11 +504,9 @@ class FCConv3DLayer(Layer):
 
 class Conv3DLSTMLayer(Layer):
     """Convolution 3D LSTM layer
-
     Unlike a standard LSTM cell witch doesn't have a spatial information,
     Convolutional 3D LSTM has limited connection that respects spatial
     configuration of LSTM cells.
-
     The filter_shape defines the size of neighbor that the 3D LSTM cells will consider.
     """
 
@@ -608,7 +602,6 @@ class ConcatLayer(Layer):
         """
         list of prev layers to concatenate
         axis to concatenate
-
         For tensor5, channel dimension is axis=2 (due to theano conv3d
         convention). For image, axis=1
         """
