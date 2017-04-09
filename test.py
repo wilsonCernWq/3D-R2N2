@@ -11,5 +11,3 @@ def elu(x):
     x : float32
     """
     return tensor.switch(x > 0, x, tensor.expm1(x))
-
-elu(2)
