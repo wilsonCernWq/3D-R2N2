@@ -6,6 +6,7 @@ set -e
 export PYTHONUNBUFFERED="True"
 
 NET_NAME=ResidualGRUNet
+DATASET='./experiments/dataset/shapenet_unit_test.json'
 EXP_DETAIL=default_model
 OUT_PATH='./output/'$NET_NAME/$EXP_DETAIL
 LOG="$OUT_PATH/log.`date +'%Y-%m-%d_%H-%M-%S'`"
@@ -19,9 +20,10 @@ echo Logging output to "$LOG"
 
 python main.py \
       --batch-size 24 \
-      --iter 60000 \
+      --iter 100 \
       --out $OUT_PATH \
       --model $NET_NAME \
+      --dataset $DATASET \
       ${*:1}
 
 python main.py \
@@ -30,4 +32,5 @@ python main.py \
       --out $OUT_PATH \
       --weights $OUT_PATH/weights.npy \
       --model $NET_NAME \
+      --dataset $DATASET \
       ${*:1}

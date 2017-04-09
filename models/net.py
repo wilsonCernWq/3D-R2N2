@@ -11,7 +11,9 @@ tensor5 = tensor.TensorType(theano.config.floatX, (False,) * 5)
 
 class Net(object):
 
-    def __init__(self, random_seed=dt.datetime.now().microsecond, compute_grad=True):
+    def __init__(self, 
+                 random_seed=dt.datetime.now().microsecond,
+                 compute_grad=True):
         self.rng = np.random.RandomState(random_seed)
 
         self.batch_size = cfg.CONST.BATCH_SIZE
@@ -26,7 +28,7 @@ class Net(object):
         self.is_x_tensor4 = True
 
         # (self.batch_size, self.n_vox, 2, self.n_vox, self.n_vox),
-        self.y = tensor5()
+        self.y = tensor5() # y is the ground truth
 
         self.activations = []  # list of all intermediate activations
         self.loss = []  # final loss

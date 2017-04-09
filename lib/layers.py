@@ -266,7 +266,7 @@ class ConvLayer(Layer):
     self._input_shape: [batch_size, n_in_channel, n_height, n_width]
     """
 
-    def __init__(self, prev_layer, filter_shape, padding=True, params=None):
+    def __init__(self, prev_layer, filter_shape, padding=True, params=None, subsample=None):
         super().__init__(prev_layer)
         self._padding = padding
         self._filter_shape = [filter_shape[0], self._input_shape[1], filter_shape[1],
@@ -282,18 +282,26 @@ class ConvLayer(Layer):
 
         self.params = [self.W, self.b]
 
+        # define strides
+        if subsample is None:
+            self._subsample = (1,1)
+        else:
+            self._subsample = subsample
+
         # Define self._output_shape
         if padding and filter_shape[1] * filter_shape[2] > 1:
             self._padding = [0, 0, int((filter_shape[1] - 1) / 2), int((filter_shape[2] - 1) / 2)]
-            self._output_shape = [self._input_shape[0], filter_shape[0], self._input_shape[2],
-                                  self._input_shape[3]]
+            self._output_shape = [self._input_shape[0], 
+                                  filter_shape[0], 
+                                  int(self._input_shape[2] / self._subsample[0]) + 1,
+                                  int(self._input_shape[3] / self._subsample[1]) + 1]
         else:
             self._padding = [0] * 4
             # TODO: for the 'valid' convolution mode the following is the
             # output shape. Diagnose failure
             self._output_shape = [self._input_shape[0], filter_shape[0],
-                                  self._input_shape[2] - filter_shape[1] + 1,
-                                  self._input_shape[3] - filter_shape[2] + 1]
+                                  int(self._input_shape[2] - filter_shape[1] / self._subsample[0]) + 1,
+                                  int(self._input_shape[3] - filter_shape[2] / self._subsample[1]) + 1]
 
     def set_output(self):
         if sum(self._padding) > 0:
@@ -321,6 +329,7 @@ class ConvLayer(Layer):
             filter_shape=self._filter_shape,
             image_shape=np.asarray(
                 padded_input_shape, dtype=np.int16),
+            subsample=self._subsample,
             border_mode='valid')
 
         # add the bias term. Since the bias is a vector (1D array), we first

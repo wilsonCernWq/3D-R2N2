@@ -74,7 +74,7 @@ def main():
     print(args)
 
     # Set main gpu
-    theano.sandbox.cuda.use(args.gpu_id)
+    # theano.sandbox.cuda.use(args.gpu_id)
 
     if args.cfg_files is not None:
         for cfg_file in args.cfg_files:
