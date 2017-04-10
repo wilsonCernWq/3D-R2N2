@@ -5,8 +5,11 @@ set -e
 
 export PYTHONUNBUFFERED="True"
 
-NET_NAME=gru_net
-MODEL_NAME=GRUNet
+# debug
+SAVE_FREQ=40
+VALIDATION_FREQ=60
+
+NET_NAME=GRUNet
 DATASET='./experiments/dataset/shapenet_unit_test.json'
 EXP_DETAIL=default_model
 OUT_PATH='./output/'$NET_NAME/$EXP_DETAIL
@@ -23,9 +26,10 @@ python main.py \
       --batch-size 24 \
       --iter 100 \
       --out $OUT_PATH \
-      --model $MODEL_NAME \
-      --net $NET_NAME \
+      --model $NET_NAME \
       --dataset $DATASET \
+      --save-freq $SAVE_FREQ \
+      --valid-freq $VALIDATION_FREQ \
       ${*:1}
 
 python main.py \
@@ -33,7 +37,6 @@ python main.py \
       --batch-size 1 \
       --out $OUT_PATH \
       --weights $OUT_PATH/weights.npy \
-      --model $MODEL_NAME \
-      --net $NET_NAME \
+      --model $NET_NAME \
       --dataset $DATASET \
       ${*:1}

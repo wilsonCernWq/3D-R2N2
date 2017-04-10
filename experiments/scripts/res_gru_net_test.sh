@@ -5,6 +5,10 @@ set -e
 
 export PYTHONUNBUFFERED="True"
 
+# debug
+SAVE_FREQ=40
+VALIDATION_FREQ=60
+
 NET_NAME=ResidualGRUNet
 DATASET='./experiments/dataset/shapenet_unit_test.json'
 EXP_DETAIL=default_model
@@ -24,6 +28,8 @@ python main.py \
       --out $OUT_PATH \
       --model $NET_NAME \
       --dataset $DATASET \
+      --save-freq $SAVE_FREQ \
+      --valid-freq $VALIDATION_FREQ \
       ${*:1}
 
 python main.py \

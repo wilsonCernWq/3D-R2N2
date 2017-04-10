@@ -51,6 +51,24 @@ def parse_args():
         default=cfg.TRAIN.NUM_ITERATION,
         type=int)
     parser.add_argument(
+        '--save-freq',
+        dest='save_freq',
+        help='frequency to save network',
+        default=cfg.TRAIN.SAVE_FREQ,
+        type=int)
+    parser.add_argument(
+        '--valid-freq',
+        dest='valid_freq',
+        help='frequency to validate network',
+        default=cfg.TRAIN.VALIDATION_FREQ,
+        type=int)
+    parser.add_argument(
+        '--nan-check-freq',
+        dest='nan_check_freq',
+        help='frequency to do nan check',
+        default=cfg.TRAIN.NAN_CHECK_FREQ,
+        type=int)
+    parser.add_argument(
         '--dataset', dest='dataset', help='dataset config file', default=None, type=str)
     parser.add_argument(
         '--set', dest='set_cfgs', help='set config keys', default=None, nargs=argparse.REMAINDER)
@@ -88,6 +106,12 @@ def main():
         cfg_from_list(['CONST.BATCH_SIZE', args.batch_size])
     if args.iter is not None:
         cfg_from_list(['TRAIN.NUM_ITERATION', args.iter])
+    if args.save_freq is not None:
+        cfg_from_list(['TRAIN.SAVE_FREQ', args.save_freq])
+    if args.valid_freq is not None:
+        cfg_from_list(['TRAIN.VALIDATION_FREQ', args.valid_freq])
+    if args.nan_check_freq is not None:
+        cfg_from_list(['TRAIN.NAN_CHECK_FREQ', args.nan_check_freq])
     if args.net_name is not None:
         cfg_from_list(['NET_NAME', args.net_name])
     if args.model_name is not None:

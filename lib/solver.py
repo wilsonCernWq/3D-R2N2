@@ -178,7 +178,7 @@ class Solver(object):
                     print('NAN detected')
                     break
 
-            if train_ind % cfg.TRAIN.SAVE_FREQ == 0 and not train_ind == 0:
+            if (train_ind % cfg.TRAIN.SAVE_FREQ == 0 or train_ind == cfg.TRAIN.NUM_ITERATION) and not train_ind == 0:
                 self.save(training_losses, save_dir, train_ind)
 
             if loss > cfg.TRAIN.LOSS_LIMIT:
