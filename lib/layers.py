@@ -1,3 +1,4 @@
+# python
 import numpy as np
 
 # Theano
@@ -7,6 +8,7 @@ import theano.tensor as tensor
 from theano.tensor.nnet import conv, conv3d2d, sigmoid
 from theano.tensor.signal import pool
 
+
 trainable_params = []
 
 
@@ -15,6 +17,10 @@ def get_trainable_params():
     return trainable_params
 
 
+def clean_trainable_params():
+    trainable_params = []
+  
+    
 class Weight(object):
 
     def __init__(self,
